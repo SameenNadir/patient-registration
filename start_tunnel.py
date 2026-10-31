@@ -1,7 +1,12 @@
-from pyngrok import ngrok, conf
+import os
 import time
+from pyngrok import ngrok, conf
 
-conf.get_default().auth_token = "3Ix94VlIJJ0ayWfqlqQkGSwriKL_5VHKuHhtmT8ezPShnLU88"
+token = os.environ.get("NGROK_AUTHTOKEN")
+if not token:
+    raise SystemExit("Set the NGROK_AUTHTOKEN environment variable first.")
+
+conf.get_default().auth_token = token
 
 public_url = ngrok.connect(8000)
 print(f"\nYOUR PUBLIC URL: {public_url}\n")
