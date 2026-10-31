@@ -5,11 +5,9 @@ A caller dials a phone number and speaks naturally with an AI voice agent that c
 standard U.S. patient demographic information, confirms it back to them, and saves it
 to a persistent database. A companion REST API and dashboard let you view the records.
 
-## Live Demo
-- **Phone number:** [YOUR VAPI PHONE NUMBER]
-- **API base URL:** https://e38c8f46-cf18-4722-9c7a-ed36ec442b62-00-1kdv481xl1mw6.sisko.replit.dev
-- **Dashboard:** https://e38c8f46-cf18-4722-9c7a-ed36ec442b62-00-1kdv481xl1mw6.sisko.replit.dev/dashboard
-- **API docs:** https://e38c8f46-cf18-4722-9c7a-ed36ec442b62-00-1kdv481xl1mw6.sisko.replit.dev/docs
+## Demo
+The live demo (Vapi phone line + Replit hosting) is no longer active.
+To see it working, follow the Setup steps below and open the dashboard locally.
 
 ## Architecture
 Caller → Vapi (telephony + STT/TTS) → GPT-4o-mini (conversation) → create_patient tool
@@ -25,23 +23,26 @@ schemas (validation) → models (database).
 - GPT-4o-mini: fast, inexpensive, capable of structured tool-calling conversations.
 
 ## Setup (local)
-1. python -m venv venv && venv\Scripts\activate (Windows) or source venv/bin/activate (Mac)
-2. pip install -r requirements.txt
-3. uvicorn app.main:app --reload --port 8000
-4. Visit http://127.0.0.1:8000/docs and /dashboard
+1. `python -m venv venv && venv\Scripts\activate` (Windows) or `source venv/bin/activate` (Mac)
+2. `pip install -r requirements.txt`
+3. Copy `.env.example` to `.env` and fill in your values
+4. `uvicorn app.main:app --reload --port 8000`
+5. Visit http://127.0.0.1:8000/docs and http://127.0.0.1:8000/dashboard
+
+To let Vapi reach your local server, run `python start_tunnel.py`
+(requires ngrok and the `NGROK_AUTHTOKEN` environment variable).
 
 ## Environment variables
 | Variable | Purpose |
 |---|---|
 | DATABASE_URL | Database connection string (SQLite by default) |
+| NGROK_AUTHTOKEN | Only needed for `start_tunnel.py` to expose the API publicly |
 
 ## Known limitations
-- SQLite on Replit resets if the container restarts without env var persistence;
-  DATABASE_URL is pinned via Replit Secrets to avoid this.
-- No authentication on the API — acceptable for this assessment's scope.
-- Not HIPAA compliant, per the assessment's explicit scope.
+- No authentication on the API (acceptable for a prototype).
+- Not HIPAA compliant (out of scope for this project).
 
-## Bonus features implemented
+## Features
 - Duplicate detection via unique phone number constraint (409 response, agent offers update).
 - Live dashboard at /dashboard.
 
